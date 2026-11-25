@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\EjercicioController;
 use App\Http\Controllers\Admin\LeccionController;
 use App\Http\Controllers\Admin\UnidadController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Alumno\RutaController;
 use App\Http\Controllers\Docente\GrupoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RolMiddleware;
@@ -77,12 +78,14 @@ Route::middleware(['auth', 'verified', RolMiddleware::class.':docente'])
         Route::delete('grupos/{grupo}/alumnos/{alumno}', [GrupoController::class, 'quitarAlumno'])->name('grupos.alumnos.quitar');
     });
 
-// Alumno
+// Alumno: ruta de aprendizaje y ejercicios (RF012 a RF017)
 Route::middleware(['auth', 'verified', RolMiddleware::class.':alumno'])
     ->prefix('alumno')->name('alumno.')->group(function () {
-        Route::get('/', function () {
-            return view('alumno.panel');
-        })->name('panel');
+        Route::get('/', [RutaController::class, 'index'])->name('panel');
+        Route::get('unidades/{unidad}', [RutaController::class, 'unidad'])->name('unidades.show');
+        Route::get('lecciones/{leccion}', [RutaController::class, 'leccion'])->name('lecciones.show');
+        Route::get('ejercicios/{ejercicio}', [RutaController::class, 'ejercicio'])->name('ejercicios.show');
+        Route::post('ejercicios/{ejercicio}', [RutaController::class, 'responder'])->name('ejercicios.responder');
     });
 
 require __DIR__.'/auth.php';
