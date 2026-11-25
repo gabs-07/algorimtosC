@@ -14,6 +14,7 @@
 
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <p class="text-gray-900">Hola, {{ auth()->user()->nombre }}. Avanza a tu propio ritmo: completa todos los ejercicios de una unidad para desbloquear la siguiente.</p>
+                <p class="mt-2 text-sm"><a href="{{ route('profile.edit') }}#logros" class="text-indigo-600 hover:underline">Ver mis logros →</a></p>
                 <div class="mt-4">
                     <div class="flex justify-between text-sm text-gray-600 mb-1">
                         <span>Avance general</span>

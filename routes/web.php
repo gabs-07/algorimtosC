@@ -76,6 +76,7 @@ Route::middleware(['auth', 'verified', RolMiddleware::class.':docente'])
         Route::resource('grupos', GrupoController::class);
         Route::post('grupos/{grupo}/alumnos', [GrupoController::class, 'agregarAlumno'])->name('grupos.alumnos.agregar');
         Route::delete('grupos/{grupo}/alumnos/{alumno}', [GrupoController::class, 'quitarAlumno'])->name('grupos.alumnos.quitar');
+        Route::post('grupos/{grupo}/desbloqueos', [GrupoController::class, 'desbloquear'])->name('grupos.desbloqueos');
     });
 
 // Alumno: ruta de aprendizaje y ejercicios (RF012 a RF017)

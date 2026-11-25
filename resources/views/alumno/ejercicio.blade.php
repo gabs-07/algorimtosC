@@ -17,6 +17,9 @@
                         @if ($resultado['unidad_completada'])
                             <p>🎉 Completaste la unidad «{{ $resultado['unidad_completada'] }}». Si hay una siguiente unidad, ya quedó desbloqueada.</p>
                         @endif
+                        @foreach ($resultado['logros'] ?? [] as $logro)
+                            <p>🏆 ¡Nuevo logro desbloqueado: <strong>{{ $logro }}</strong>!</p>
+                        @endforeach
                         <div class="flex gap-3">
                             @if ($siguiente)
                                 <a href="{{ route('alumno.ejercicios.show', $siguiente) }}" class="inline-flex items-center px-4 py-2 bg-green-700 text-white rounded-md text-xs font-semibold uppercase tracking-widest hover:bg-green-600">Siguiente ejercicio</a>

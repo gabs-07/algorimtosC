@@ -7,6 +7,7 @@ use App\Models\Ejercicio;
 use App\Models\Intento;
 use App\Models\Leccion;
 use App\Models\Unidad;
+use App\Services\LogroService;
 use App\Services\RutaAprendizaje;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ use Illuminate\View\View;
 
 class RutaController extends Controller
 {
-    public function __construct(private RutaAprendizaje $ruta)
+    public function __construct(private RutaAprendizaje $ruta, private LogroService $logros)
     {
     }
 
@@ -109,7 +110,11 @@ class RutaController extends Controller
         ]);
 
         $unidadCompletada = null;
+        $logrosNuevos = [];
         if ($correcto) {
+            // Los logros se otorgan al registrar un intento correcto (RF020)
+            $logrosNuevos = $this->logros->otorgar($alumno)->pluck('nombre')->all();
+
             $estadoDespues = $this->ruta->estado($alumno, $leccion->unidad)['estado'] ?? null;
             if ($estadoAntes !== RutaAprendizaje::COMPLETADA && $estadoDespues === RutaAprendizaje::COMPLETADA) {
                 $unidadCompletada = $leccion->unidad->titulo;
@@ -119,7 +124,7 @@ class RutaController extends Controller
         return redirect()
             ->route('alumno.ejercicios.show', $ejercicio)
             ->withInput($ejercicio->tipo === 'completar' ? $request->only('respuesta') : [])
-            ->with('resultado', ['correcto' => $correcto, 'unidad_completada' => $unidadCompletada]);
+            ->with('resultado', ['correcto' => $correcto, 'unidad_completada' => $unidadCompletada, 'logros' => $logrosNuevos]);
     }
 
     /* ---------------- Evaluación por tipo ---------------- */
